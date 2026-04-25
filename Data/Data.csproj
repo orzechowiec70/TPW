@@ -5,4 +5,13 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="DataAPI.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="DataAbstractApi" />
+    <None Remove="DataAPI" />
+  </ItemGroup>
+
 </Project>

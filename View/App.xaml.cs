@@ -1,14 +1,34 @@
-﻿using System.Configuration;
-using System.Data;
-using System.Windows;
+﻿using System.Windows;
+using Logic;
+using Data;
+using Model;
+using ViewModel;
 
 namespace View
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App : Application
     {
-    }
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
 
+            // 1. DANE
+            DataAbstractApi dataApi = DataAbstractApi.CreateApi(800, 400);
+
+            // 2. LOGIKA
+            LogicAbstractApi logicApi = LogicAbstractApi.CreateApi(dataApi.GetBoard());
+           
+
+            // 3. MODEL
+            MainModel model = new MainModel(logicApi);
+
+            // 4. VIEWMODEL
+            MainViewModel viewModel = new MainViewModel(model);
+
+            // 5. VIEW (Widok)
+            MainWindow window = new MainWindow();
+            window.DataContext = viewModel; // Podpinamy ViewModel jako "kontekst danych"
+            window.Show();
+        }
+    }
 }
