@@ -9,15 +9,18 @@ namespace Logic
 {
     internal class LogicAPI : LogicAbstractApi
     {
-        private readonly IBoard? board;
+        private readonly DataAbstractApi dataApi;
+        private readonly IBoard board;
         private List<IBall> balls;
         private Random random = new Random();
         private  CancellationTokenSource cancelTokenSource;
         public override event EventHandler PositionChanged;
 
-        public LogicAPI(IBoard Board)
+        public LogicAPI(DataAbstractApi inDataApi)
+
         {
-            board = Board;
+            dataApi = inDataApi;
+            board = inDataApi.GetBoard();
             balls = new List<IBall>();
         }
 
@@ -61,8 +64,7 @@ namespace Logic
                    
                 }
                 PositionChanged?.Invoke(this, EventArgs.Empty);
-                // Odświeżanie co ~16ms daje płynność ok. 60 FPS (klatek na sekundę)
-                await Task.Delay(16, token);
+                await Task.Delay(2, token);
             }
         }
         private void MoveBall(IBall ball)

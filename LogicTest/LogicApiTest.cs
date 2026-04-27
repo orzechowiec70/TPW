@@ -8,18 +8,14 @@ namespace LogicTest
 {
     [TestClass]
     public class LogicApiTest
-    {
-        private class BoardMock : IBoard
-        {
-            public double width => 800;
-            public double height => 400;
-        }
+    {   
 
         [TestMethod]
         public void StartSimulation_CreatesCorrectNumberOfBalls()
         {
-            var boardMock = new BoardMock();
-            LogicAbstractApi logicApi = LogicAbstractApi.CreateApi(boardMock);
+            DataAbstractApi dataApi = DataAbstractApi.CreateApi(800, 400);
+            LogicAbstractApi logicApi = LogicAbstractApi.CreateApi(dataApi);
+           
             int expectedCount = 10;
 
             logicApi.StartSimulation(expectedCount);
@@ -32,18 +28,18 @@ namespace LogicTest
         [TestMethod]
         public void Balls_AreWithinBoardBoundaries_AfterCreation()
         {
-            var boardMock = new BoardMock();
-            LogicAbstractApi logicApi = LogicAbstractApi.CreateApi(boardMock);
+            DataAbstractApi dataApi = DataAbstractApi.CreateApi(800, 400);
+            LogicAbstractApi logicApi = LogicAbstractApi.CreateApi(dataApi);
 
             logicApi.StartSimulation(20);
             var balls = logicApi.GetBalls();
-
+            IBoard board = dataApi.GetBoard();
             foreach (var ball in balls)
             {
                 Assert.IsTrue(ball.position.X >= ball.radius, "Kula poza lewą krawędzią.");
-                Assert.IsTrue(ball.position.X <= boardMock.width - ball.radius, "Kula poza prawą krawędzią.");
+                Assert.IsTrue(ball.position.X <= board.width - ball.radius, "Kula poza prawą krawędzią.");
                 Assert.IsTrue(ball.position.Y >= ball.radius, "Kula poza górną krawędzią.");
-                Assert.IsTrue(ball.position.Y <= boardMock.height - ball.radius, "Kula poza dolną krawędzią.");
+                Assert.IsTrue(ball.position.Y <= board.height - ball.radius, "Kula poza dolną krawędzią.");
             }
             logicApi.StopSimulation();
         }
@@ -51,8 +47,8 @@ namespace LogicTest
         [TestMethod]
         public void StopSimulation_ClearsCancellationToken()
         {
-            var boardMock = new BoardMock();
-            LogicAbstractApi logicApi = LogicAbstractApi.CreateApi(boardMock);
+            DataAbstractApi dataApi = DataAbstractApi.CreateApi(800, 400);
+            LogicAbstractApi logicApi = LogicAbstractApi.CreateApi(dataApi);
 
             logicApi.StartSimulation(5);
             logicApi.StopSimulation();

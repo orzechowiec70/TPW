@@ -12,16 +12,13 @@ namespace ViewModelTest
     public class MainViewModelTest
     {
       
-        private class BoardMock : IBoard
-        {
-            public double width => 800;
-            public double height => 400;
-        }
+
 
         [TestMethod]
         public void StartCommand_PopulatesBallsCollection()
         {
-            LogicAbstractApi logic = LogicAbstractApi.CreateApi(new BoardMock());
+            DataAbstractApi dataApi = DataAbstractApi.CreateApi(800, 400);
+            LogicAbstractApi logic = LogicAbstractApi.CreateApi(dataApi);
             var model = new MainModel(logic);
             var viewModel = new MainViewModel(model);
             viewModel.NumberOfBalls = 3;
@@ -35,7 +32,8 @@ namespace ViewModelTest
         [TestMethod]
         public void NumberOfBalls_PropertyChange_RaisesEvent()
         {
-            LogicAbstractApi logic = LogicAbstractApi.CreateApi(new BoardMock());
+            DataAbstractApi dataApi = DataAbstractApi.CreateApi(800, 400);
+            LogicAbstractApi logic = LogicAbstractApi.CreateApi(dataApi);
             var model = new MainModel(logic);
             var viewModel = new MainViewModel(model);
             bool propertyChangedRaised = false;
@@ -54,7 +52,8 @@ namespace ViewModelTest
         [TestMethod]
         public void BallUpdate_IsCalled_WhenModelRaisesEvent()
         {
-            LogicAbstractApi logic = LogicAbstractApi.CreateApi(new BoardMock());
+            DataAbstractApi dataApi = DataAbstractApi.CreateApi(800, 400);
+            LogicAbstractApi logic = LogicAbstractApi.CreateApi(dataApi);
             var model = new MainModel(logic);
             var viewModel = new MainViewModel(model);
 

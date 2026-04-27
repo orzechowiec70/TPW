@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Xml.Serialization;
 using Data;
 namespace Logic
 {
@@ -12,9 +10,9 @@ namespace Logic
         public abstract IEnumerable<IBall> GetBalls();
         public abstract event EventHandler PositionChanged;
 
-        public static LogicAbstractApi CreateApi(IBoard board)
+        public static LogicAbstractApi CreateApi(DataAbstractApi dataApi)
         {
-            return new LogicAPI(board);
+            return new LogicAPI(dataApi);
         }
     }
 }

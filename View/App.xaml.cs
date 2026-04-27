@@ -16,7 +16,7 @@ namespace View
             DataAbstractApi dataApi = DataAbstractApi.CreateApi(800, 400);
 
             // 2. LOGIKA
-            LogicAbstractApi logicApi = LogicAbstractApi.CreateApi(dataApi.GetBoard());
+            LogicAbstractApi logicApi = LogicAbstractApi.CreateApi(dataApi);
            
 
             // 3. MODEL
@@ -25,9 +25,9 @@ namespace View
             // 4. VIEWMODEL
             MainViewModel viewModel = new MainViewModel(model);
 
-            // 5. VIEW (Widok)
+            // 5. VIEW
             MainWindow window = new MainWindow();
-            window.DataContext = viewModel; // Podpinamy ViewModel jako "kontekst danych"
+            window.DataContext = viewModel;
             window.Show();
         }
     }
