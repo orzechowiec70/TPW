@@ -4,6 +4,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Windows.Input;
 
 namespace ViewModel
@@ -12,6 +13,8 @@ namespace ViewModel
     {
         private readonly MainModel model;
         private int numberOfBalls = 5;
+
+        private readonly SynchronizationContext syncContext;
 
         public ObservableCollection<BallModel> Balls { get; } = new ObservableCollection<BallModel>();
 
@@ -31,6 +34,9 @@ namespace ViewModel
         public MainViewModel(MainModel inModel)
         {
             model = inModel;
+
+            syncContext = SynchronizationContext.Current ?? new SynchronizationContext();
+
             StartCommand = new Command(Start);
             StopCommand = new Command(Stop);
             model.PositionChanged += OnPositionChanged;
@@ -46,13 +52,19 @@ namespace ViewModel
                 Balls.Add(new BallModel(ball));
             }
         }
+
         private void OnPositionChanged(object sender, EventArgs e)
         {
-            foreach (var ballModel in Balls)
+   
+            syncContext.Post(_ =>
             {
-                ballModel.Update();
-            }
+                foreach (var ballModel in Balls)
+                {
+                    ballModel.Update();
+                }
+            }, null);
         }
+
         private void Stop()
         {
             model.Stop();

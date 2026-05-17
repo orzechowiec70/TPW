@@ -23,7 +23,7 @@ namespace DataTest
         public void CreateBallTest()
         {
           
-            IBall ball = DataAbstractApi.CreateBall(10, 20, 1, 2, 15);
+            IBall ball = DataAbstractApi.CreateBall(10, 20, 1, 2, 15,15);
 
             Assert.AreEqual(10, ball.position.X);
             Assert.AreEqual(20, ball.position.Y);

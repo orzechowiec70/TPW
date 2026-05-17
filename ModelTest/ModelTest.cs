@@ -12,8 +12,6 @@ namespace ModelTest
         public int LastRequestedBallCount = 0;
         public override event EventHandler PositionChanged;
 
-        
-
         public override void StartSimulation(int numberOfBalls)
         {
             StartSimulationCalledCount++;

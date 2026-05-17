@@ -6,9 +6,9 @@ namespace Data
     {
         public abstract IBoard GetBoard();
 
-        public static IBall CreateBall(double px, double py, double vx, double vy, double radius)
+        public static IBall CreateBall(double px, double py, double vx, double vy, double radius, double weight)
         {
-            return new Ball(px, py, vx, vy, radius);
+            return new Ball(px, py, vx, vy, radius,weight);
         }
 
         public static DataAbstractApi CreateApi(double boardWidth = 800, double boardHeight = 400)
