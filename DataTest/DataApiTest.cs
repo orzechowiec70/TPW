@@ -22,12 +22,16 @@ namespace DataTest
         [TestMethod]
         public void CreateBallTest()
         {
-          
-            IBall ball = DataAbstractApi.CreateBall(10, 20, 1, 2, 15,15);
 
-            Assert.AreEqual(10, ball.position.X);
-            Assert.AreEqual(20, ball.position.Y);
-            Assert.AreEqual(15, ball.radius);
+            double px = 10, py = 20, vx = 2, vy = -2, radius = 15, weight = 20;
+            IBall ball = DataAbstractApi.CreateBall(px, py, vx, vy, radius, weight);
+
+            Assert.AreEqual(px, ball.position.X);
+            Assert.AreEqual(py, ball.position.Y);
+            Assert.AreEqual(vx, ball.velocity.X);
+            Assert.AreEqual(vy, ball.velocity.Y);
+            Assert.AreEqual(radius, ball.radius);
+            Assert.AreEqual(weight, ball.weight);
         }
     }
 }

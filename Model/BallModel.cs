@@ -1,12 +1,14 @@
-﻿using System.ComponentModel;
+﻿using Data;
+using System;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Data;
+using System.Threading;
 namespace Model
 {
     public class BallModel : INotifyPropertyChanged
     {
         private readonly IBall logicBall;
-
+        private readonly SynchronizationContext? _syncContext;
         public double X => logicBall.position.X;
         public double Y => logicBall.position.Y;
         public double Diameter => logicBall.radius*2;
@@ -16,6 +18,20 @@ namespace Model
         public BallModel(IBall LogicBall)
         {
             logicBall = LogicBall;
+            _syncContext = SynchronizationContext.Current;
+            logicBall.BallChanged += OnBallChanged;
+        }
+
+        private void OnBallChanged(object? sender, EventArgs e)
+        {
+            if (_syncContext != null)
+            {
+                _syncContext.Post(_ => Update(), null);
+            }
+            else
+            {
+                Update();
+            }
         }
 
         public void Update()

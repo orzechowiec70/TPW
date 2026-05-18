@@ -39,7 +39,6 @@ namespace ViewModel
 
             StartCommand = new Command(Start);
             StopCommand = new Command(Stop);
-            model.PositionChanged += OnPositionChanged;
         }
 
         private void Start()
@@ -51,18 +50,6 @@ namespace ViewModel
             {
                 Balls.Add(new BallModel(ball));
             }
-        }
-
-        private void OnPositionChanged(object sender, EventArgs e)
-        {
-   
-            syncContext.Post(_ =>
-            {
-                foreach (var ballModel in Balls)
-                {
-                    ballModel.Update();
-                }
-            }, null);
         }
 
         private void Stop()

@@ -68,7 +68,7 @@ namespace Logic
             cancelTokenSource = new CancellationTokenSource();
             foreach (var ball in balls)
             {
-                ball.StartMoving(cancelTokenSource.Token);
+                ball.StartMoving(cancelTokenSource.Token, board.width, board.height);
             }
             Task.Run(() => CollisionMonitorLoop(cancelTokenSource.Token));
         }
@@ -79,7 +79,6 @@ namespace Logic
         {
             while (!token.IsCancellationRequested)
             {
-                HandleWallCollisions();
                 HandleBallCollisions();
 
                 PositionChanged?.Invoke(this, EventArgs.Empty);
@@ -87,52 +86,6 @@ namespace Logic
             }
         }
 
-        private void HandleWallCollisions()
-        {
-            foreach (var ball in balls)
-            {
-                lock (ball.lockObject)
-                {
-                    double newX = ball.position.X;
-                    double newY = ball.position.Y;
-                    double vx = ball.velocity.X;
-                    double vy = ball.velocity.Y;
-
-                    bool bounced = false;
-                    if (newX - ball.radius <= 0)
-                    {
-                        vx = Math.Abs(vx);
-                        newX = ball.radius;
-                        bounced = true;
-                    }
-                    else if (newX + ball.radius >= board.width)
-                    {
-                        vx = -Math.Abs(vx);
-                        newX = board.width - ball.radius;
-                        bounced = true;
-                    }
-
-                    if (newY - ball.radius <= 0)
-                    {
-                        vy = Math.Abs(vy);
-                        newY = ball.radius;
-                        bounced = true;
-                    }
-                    else if (newY + ball.radius >= board.height)
-                    {
-                        vy = -Math.Abs(vy);
-                        newY = board.height - ball.radius;
-                        bounced = true;
-                    }
-
-                    if (bounced)
-                    {
-                        ball.velocity = new Vector2D(vx, vy);
-                        ball.position = new Vector2D(newX, newY);
-                    }
-                }
-            }
-        }
         private void HandleBallCollisions()
         {
             for (int i = 0; i < balls.Count; i++)
