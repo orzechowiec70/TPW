@@ -14,6 +14,6 @@ namespace Data
         object lockObject { get; }
 
         event EventHandler BallChanged;
-        void StartMoving(CancellationToken token, double boardWidth, double boardHeight);
+        void StartMoving(CancellationToken token);
     }
 }

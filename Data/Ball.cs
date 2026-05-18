@@ -23,7 +23,7 @@ namespace Data
             radius = inRadius;
             weight = inWeight;
         }
-        public void StartMoving(CancellationToken token, double boardWidth, double boardHeight)
+        public void StartMoving(CancellationToken token)
         {
             Task.Run(async () =>
             {
@@ -33,32 +33,7 @@ namespace Data
                     {
                         double newX = position.X + velocity.X;
                         double newY = position.Y + velocity.Y;
-                        double vx = velocity.X;
-                        double vy = velocity.Y;
 
-                        if (newX - radius <= 0)
-                        {
-                            vx = Math.Abs(vx);
-                            newX = radius;
-                        }
-                        else if (newX + radius >= boardWidth)
-                        {
-                            vx = -Math.Abs(vx);
-                            newX = boardWidth - radius;
-                        }
-
-                        if (newY - radius <= 0)
-                        {
-                            vy = Math.Abs(vy);
-                            newY = radius;
-                        }
-                        else if (newY + radius >= boardHeight)
-                        {
-                            vy = -Math.Abs(vy);
-                            newY = boardHeight - radius;
-                        }
-
-                        velocity = new Vector2D(vx, vy);
                         position = new Vector2D(newX, newY);
                     }
 

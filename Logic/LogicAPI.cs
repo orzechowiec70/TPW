@@ -68,7 +68,7 @@ namespace Logic
             cancelTokenSource = new CancellationTokenSource();
             foreach (var ball in balls)
             {
-                ball.StartMoving(cancelTokenSource.Token, board.width, board.height);
+                ball.StartMoving(cancelTokenSource.Token);
             }
             Task.Run(() => CollisionMonitorLoop(cancelTokenSource.Token));
         }
@@ -79,6 +79,7 @@ namespace Logic
         {
             while (!token.IsCancellationRequested)
             {
+                HandleWallCollisions();
                 HandleBallCollisions();
 
                 PositionChanged?.Invoke(this, EventArgs.Empty);
@@ -118,6 +119,54 @@ namespace Logic
                                 }
                             }
                         }
+                    }
+                }
+            }
+        }
+
+        private void HandleWallCollisions()
+        {
+            foreach (var ball in balls)
+            {
+                lock (ball.lockObject)
+                {
+                    double newX = ball.position.X;
+                    double newY = ball.position.Y;
+                    double vx = ball.velocity.X;
+                    double vy = ball.velocity.Y;
+
+                    bool changed = false;
+
+                    if (newX - ball.radius <= 0)
+                    {
+                        vx = Math.Abs(vx);
+                        newX = ball.radius;
+                        changed = true;
+                    }
+                    else if (newX + ball.radius >= board.width)
+                    {
+                        vx = -Math.Abs(vx);
+                        newX = board.width - ball.radius;
+                        changed = true;
+                    }
+
+                    if (newY - ball.radius <= 0)
+                    {
+                        vy = Math.Abs(vy);
+                        newY = ball.radius;
+                        changed = true;
+                    }
+                    else if (newY + ball.radius >= board.height)
+                    {
+                        vy = -Math.Abs(vy);
+                        newY = board.height - ball.radius;
+                        changed = true;
+                    }
+
+                    if (changed)
+                    {
+                        ball.velocity = new Vector2D(vx, vy);
+                        ball.position = new Vector2D(newX, newY);
                     }
                 }
             }

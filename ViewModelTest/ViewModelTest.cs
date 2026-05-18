@@ -19,7 +19,7 @@ namespace ViewModelTest
 
         public event EventHandler BallChanged;
 
-        public void StartMoving(CancellationToken token, double boardWidth, double boardHeight) { }
+        public void StartMoving(CancellationToken token) { }
         public void Move(double newX, double newY)
         {
             position = new Vector2D(newX, newY);
