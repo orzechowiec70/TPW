@@ -6,6 +6,11 @@ namespace Data
     {
         public abstract IBoard GetBoard();
 
+        internal static Logger logger = new Logger();
+        static DataAbstractApi()
+        {
+            logger.StartLogging();
+        }
         public static IBall CreateBall(double px, double py, double vx, double vy, double radius, double weight)
         {
             return new Ball(px, py, vx, vy, radius,weight);

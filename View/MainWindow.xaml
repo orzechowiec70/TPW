@@ -14,6 +14,7 @@
             <TextBox Width="50" Text="{Binding NumberOfBalls, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" />
             <Button Content="Start" Command="{Binding StartCommand}" Margin="10,0,0,0" Width="80" />
             <Button Content="Stop" Command="{Binding StopCommand}" Margin="10,0,0,0" Width="80" />
+            <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" VerticalAlignment="Center" Margin="15,0,0,0" FontWeight="Bold" />
         </StackPanel>
 
         <Viewbox Grid.Row="1" Stretch="Uniform" Margin="10">

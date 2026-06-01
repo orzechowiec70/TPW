@@ -14,9 +14,7 @@ namespace Logic
         private Random random = new Random();
         private CancellationTokenSource cancelTokenSource;
         private readonly object _lock = new object();
-
         public override event EventHandler PositionChanged;
-
         public LogicAPI(DataAbstractApi inDataApi)
         {
             dataApi = inDataApi;
@@ -96,28 +94,19 @@ namespace Logic
                     IBall b1 = balls[i];
                     IBall b2 = balls[j];
 
-                    IBall firstLock = b1.GetHashCode() < b2.GetHashCode() ? b1 : b2;
-                    IBall secondLock = b1.GetHashCode() < b2.GetHashCode() ? b2 : b1;
+                    double dx = b2.position.X - b1.position.X;
+                    double dy = b2.position.Y - b1.position.Y;
+                    double distance = Math.Sqrt(dx * dx + dy * dy);
+                    double minDistance = b1.radius + b2.radius;
 
-                    lock (firstLock.lockObject)
+                    if (distance <= minDistance)
                     {
-                        lock (secondLock.lockObject)
+                        Vector2D relVel = new Vector2D(b2.velocity.X - b1.velocity.X, b2.velocity.Y - b1.velocity.Y);
+                        double dotProduct = dx * relVel.X + dy * relVel.Y;
+
+                        if (dotProduct < 0)
                         {
-                            double dx = b2.position.X - b1.position.X;
-                            double dy = b2.position.Y - b1.position.Y;
-                            double distance = Math.Sqrt(dx * dx + dy * dy);
-                            double minDistance = b1.radius + b2.radius;
-
-                            if (distance <= minDistance)
-                            {
-                                Vector2D relVel = new Vector2D(b2.velocity.X - b1.velocity.X, b2.velocity.Y - b1.velocity.Y);
-                                double dotProduct = dx * relVel.X + dy * relVel.Y;
-
-                                if (dotProduct < 0)
-                                {
-                                    ResolveCollision(b1, b2);
-                                }
-                            }
+                            ResolveCollision(b1, b2);
                         }
                     }
                 }
@@ -167,6 +156,7 @@ namespace Logic
                     {
                         ball.velocity = new Vector2D(vx, vy);
                         ball.position = new Vector2D(newX, newY);
+
                     }
                 }
             }
@@ -189,7 +179,6 @@ namespace Logic
 
             if (distSq == 0) return;
 
-            // Fizyka zderzenia sprężystego
             double dot = (v1.X - v2.X) * dx + (v1.Y - v2.Y) * dy;
             double scalar = (2 * m2 / (m1 + m2)) * (dot / distSq);
 

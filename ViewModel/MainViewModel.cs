@@ -13,17 +13,41 @@ namespace ViewModel
     {
         private readonly MainModel model;
         private int numberOfBalls = 5;
-
         private readonly SynchronizationContext syncContext;
-
         public ObservableCollection<BallModel> Balls { get; } = new ObservableCollection<BallModel>();
+
+        private string errorMessage = string.Empty;
+
+        public string ErrorMessage
+        {
+            get => errorMessage;
+            set
+            {
+                errorMessage = value;
+                OnPropertyChanged(nameof(ErrorMessage));
+            }
+        }
 
         public int NumberOfBalls
         {
             get => numberOfBalls;
             set
             {
-                numberOfBalls = value;
+                if (value > 200)
+                {
+                    numberOfBalls = 200;
+                    ErrorMessage = "Możesz wpisać maksymalnie 200 kul.";
+                }
+                else if (value < 0)
+                {
+                    numberOfBalls = 0;
+                    ErrorMessage = "Liczba kul nie może być ujemna.";
+                }
+                else
+                {
+                    numberOfBalls = value;
+                    ErrorMessage = string.Empty; 
+                }
                 OnPropertyChanged(nameof(NumberOfBalls));
             }
         }
