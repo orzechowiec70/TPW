@@ -4,12 +4,13 @@ namespace DataTest
 {
     internal class LoggerFakeBall : IBall
     {
-        public Vector2D position { get; set; } = new Vector2D(10.5, 20.5);
-        public Vector2D velocity { get; set; } = new Vector2D(1.0, -1.0);
+        public Vector2D position { get; private set; } = new Vector2D(10.5, 20.5);
+        public Vector2D velocity { get; private set; } = new Vector2D(1.0, -1.0);
         public double radius { get; } = 15;
         public double weight { get; } = 10;
         public object lockObject { get; } = new object();
-
+        public void SetVelocity(Vector2D newVelocity) => velocity = newVelocity;
+        public void SetPosition(Vector2D newPosition) => position = newPosition;
         public event EventHandler BallChanged;
 
         public void StartMoving(CancellationToken token) { }

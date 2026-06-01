@@ -11,18 +11,19 @@ namespace ViewModelTest
 {
     internal class FakeBall : IBall
     {
-        public Vector2D position { get; set; } = new Vector2D(0, 0);
-        public Vector2D velocity { get; set; } = new Vector2D(0, 0);
+        public Vector2D position { get; private set; } = new Vector2D(0, 0);
+        public Vector2D velocity { get; private set; } = new Vector2D(0, 0);
         public double radius { get; } = 15;
         public double weight { get; } = 10;
         public object lockObject { get; } = new object();
 
         public event EventHandler BallChanged;
-
+        public void SetVelocity(Vector2D newVelocity) => velocity = newVelocity;
+        public void SetPosition(Vector2D newPosition) => position = newPosition;
         public void StartMoving(CancellationToken token) { }
         public void Move(double newX, double newY)
         {
-            position = new Vector2D(newX, newY);
+            SetPosition(new Vector2D(newX, newY));
             BallChanged?.Invoke(this, EventArgs.Empty);
         }
     }
@@ -77,7 +78,7 @@ namespace ViewModelTest
         public void BallModel_UpdatesProperties_When_LogicBall_Moves()
         {
             FakeBall fakeBall = new FakeBall();
-            fakeBall.position = new Vector2D(10, 10);
+            fakeBall.SetPosition(new Vector2D(10, 10));
 
             BallModel ballModel = new BallModel(fakeBall);
             bool isNotified = false;
