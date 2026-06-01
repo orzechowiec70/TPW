@@ -14,6 +14,8 @@
             <TextBox Width="50" Text="{Binding NumberOfBalls, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" />
             <Button Content="Start" Command="{Binding StartCommand}" Margin="10,0,0,0" Width="80" />
             <Button Content="Stop" Command="{Binding StopCommand}" Margin="10,0,0,0" Width="80" />
+            <Label Content="Czas:" Margin="20,0,0,0" VerticalAlignment="Center" />
+            <TextBlock Text="{Binding Runtime}" VerticalAlignment="Center" FontWeight="Bold" FontSize="14" />
             <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" VerticalAlignment="Center" Margin="15,0,0,0" FontWeight="Bold" />
         </StackPanel>
 

@@ -154,8 +154,8 @@ namespace Logic
 
                     if (changed)
                     {
-                        ball.velocity = new Vector2D(vx, vy);
-                        ball.position = new Vector2D(newX, newY);
+                        ball.SetVelocity(new Vector2D(vx, vy));
+                        ball.SetPosition(new Vector2D(newX, newY));
 
                     }
                 }
@@ -182,12 +182,12 @@ namespace Logic
             double dot = (v1.X - v2.X) * dx + (v1.Y - v2.Y) * dy;
             double scalar = (2 * m2 / (m1 + m2)) * (dot / distSq);
 
-            b1.velocity = new Vector2D(v1.X - scalar * dx, v1.Y - scalar * dy);
+            b1.SetVelocity(new Vector2D(v1.X - scalar * dx, v1.Y - scalar * dy));
 
             dot = (v2.X - v1.X) * (-dx) + (v2.Y - v1.Y) * (-dy);
             scalar = (2 * m1 / (m1 + m2)) * (dot / distSq);
 
-            b2.velocity = new Vector2D(v2.X - scalar * (-dx), v2.Y - scalar * (-dy));
+            b2.SetVelocity(new Vector2D(v2.X - scalar * (-dx), v2.Y - scalar * (-dy)));
         }
     }
 }

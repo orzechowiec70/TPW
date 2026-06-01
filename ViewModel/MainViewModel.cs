@@ -6,6 +6,8 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Windows.Input;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace ViewModel
 {
@@ -14,6 +16,8 @@ namespace ViewModel
         private readonly MainModel model;
         private int numberOfBalls = 5;
         private readonly SynchronizationContext syncContext;
+        private Stopwatch stopwatch = new Stopwatch();
+        private string runtime = "00:00:00";
         public ObservableCollection<BallModel> Balls { get; } = new ObservableCollection<BallModel>();
 
         private string errorMessage = string.Empty;
@@ -25,6 +29,16 @@ namespace ViewModel
             {
                 errorMessage = value;
                 OnPropertyChanged(nameof(ErrorMessage));
+            }
+        }
+
+        public string Runtime
+        {
+            get => runtime;
+            set
+            {
+                runtime = value;
+                OnPropertyChanged(nameof(Runtime));
             }
         }
 
@@ -63,10 +77,22 @@ namespace ViewModel
 
             StartCommand = new Command(Start);
             StopCommand = new Command(Stop);
+
+            model.PositionChanged += OnPositionChanged;
+        }
+        private void OnPositionChanged(object sender, EventArgs e)
+        {
+            if (stopwatch.IsRunning)
+            {
+                
+                Runtime = stopwatch.Elapsed.ToString(@"hh\:mm\:ss");
+            }
         }
 
         private void Start()
         {
+            stopwatch.Restart();
+
             model.Start(NumberOfBalls);
 
             Balls.Clear();
@@ -79,6 +105,7 @@ namespace ViewModel
         private void Stop()
         {
             model.Stop();
+            stopwatch.Stop();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

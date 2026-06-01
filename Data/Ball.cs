@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -7,8 +8,8 @@ namespace Data
 {
     internal class Ball : IBall
     {
-        public Vector2D position {  get; set; }
-        public Vector2D velocity { get; set; }
+        public Vector2D position { get; private set; }
+        public Vector2D velocity { get; private set; }
         public double radius { get; }
         public double weight { get; }
         public object lockObject { get; } = new object();
@@ -23,6 +24,22 @@ namespace Data
             radius = inRadius;
             weight = inWeight;
         }
+
+        public void SetPosition(Vector2D newPosition)
+        {
+            lock (lockObject)
+            {
+                position = newPosition;
+            }
+        }
+        public void SetVelocity(Vector2D newVelocity)
+        {
+            lock (lockObject)
+            {
+                velocity = newVelocity;
+            }
+        }
+
         public void StartMoving(CancellationToken token)
         {
             Task.Run(async () =>

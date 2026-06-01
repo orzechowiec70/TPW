@@ -5,8 +5,10 @@ namespace Data
 {
     public interface IBall 
     {
-        Vector2D position { get; set; }
-        Vector2D velocity { get; set; }
+        Vector2D position { get; }
+        void SetPosition(Vector2D newPosition);
+        Vector2D velocity { get; }
+        void SetVelocity(Vector2D newVelocity);
 
         double radius { get; }
         double weight { get; }
