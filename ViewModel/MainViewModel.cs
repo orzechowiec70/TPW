@@ -84,12 +84,14 @@ namespace ViewModel
         {
             if (stopwatch.IsRunning)
             {
-                
-                Runtime = stopwatch.Elapsed.ToString(@"hh\:mm\:ss");
+                syncContext.Post(_ =>
+                {
+                    Runtime = stopwatch.Elapsed.ToString(@"hh\:mm\:ss");
+                }, null);
             }
         }
 
-        private void Start()
+        private void Start() 
         {
             stopwatch.Restart();
 
